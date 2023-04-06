@@ -15,11 +15,15 @@ You will need to uncompress your level files first, using e.g. [this](https://gi
 
 If you supply the optional -map argument, a crude PNG map of entities in the level will be drawn for you. 
 
-Map Key:
-Red - Creature (enemies but also villagers)
-Yellow - Player start (including computer controlled wizards)
-Green - Scenery (includes trees and standing stones)
-Purple - Spells
-Cyan - Effect (things like explosions but also extra map elements like canyons and walls)
-White - Switch (hidden switches)
+Map Key:<br/>
+Red - Creature (enemies but also villagers)<br/>
+Yellow - Player start (including computer controlled wizards)<br/>
+Green - Scenery (includes trees and standing stones)<br/>
+Purple - Spells<br/>
+Cyan - Effect (things like explosions but also extra map elements like canyons and walls)<br/>
+White - Switch (hidden switches)<br/>
 
+Examples:
+
+![Level26](https://github.com/Moburma/MCLevelReader/blob/main/LEV00026.DAT.png)
+![Level27](https://github.com/Moburma/MCLevelReader/blob/main/LEV00027.DAT.png)
