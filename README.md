@@ -10,6 +10,8 @@ You will need to uncompress your level files first, using e.g. [this](https://gi
   The level file to open. E.g. LEV00000.DAT, and then if you want a map drawn or not: -map
 
   MCLevelReader.ps1  LEV00000.DAT -map
+    
+  The script will produce two CSV files, one containing Thing data (i.e. enemies, walls etc), the second Wizard data - which NPC wizards are present in the      level and their ability levels.
   
 # Map Output
 
@@ -27,3 +29,7 @@ Examples:
 
 ![Level26](https://github.com/Moburma/MCLevelReader/blob/main/LEV00026.DAT.png)
 ![Level27](https://github.com/Moburma/MCLevelReader/blob/main/LEV00027.DAT.png)
+
+# Todo
+
+- Figure out truth table for wizard spell loadouts
