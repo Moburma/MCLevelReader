@@ -1,13 +1,14 @@
 ﻿#Magic Carpet Level Reader by Moburma
 
-#VERSION 0.1
-#LAST MODIFIED: 04/04/2023
+#VERSION 0.2
+#LAST MODIFIED: 15/04/2023
 
 <#
 .SYNOPSIS
    This script can read uncompressed Magic Carpet level files (LEV00xxx.DAT) and output human readable information 
    on all Things placed in that level, including enemies, scenery spells, 2D coordinates and 
-   what type of creature/switch/etc they are.
+   what type of creature/switch/etc they are. Also outputs Wizard data - how many wizards in level and their ability 
+   levels.
 
 .DESCRIPTION    
     Reads Magic Carpet Level files and outputs character definitions as human readable data in a CSV 
@@ -303,7 +304,7 @@ Switch ($model) {
     8{ return 'Volcano'}
     9{ return 'Crater'}
     10{ return 'Teleport'}
-    11{ return 'Rubber Band'}
+    11{ return 'Duel'}
     12{ return 'Invisible'}
     13{ return 'Steal Mana'}
     14{ return 'Rebound'}
@@ -314,8 +315,8 @@ Switch ($model) {
     19{ return 'Mana Magnet'}
     20{ return 'Fire Wall'}
     21{ return 'Reverse Speed'}
-    22{ return 'Smart Bomb'}
-    23{ return 'Mini Fireball'}
+    22{ return 'Global Death'}
+    23{ return 'Rapid Fireball'}
     
 }
 }
@@ -335,30 +336,39 @@ Switch ($model){
 
 }
 
+function Wizardname($wizardname){ #Returns what the Wizard's name is
 
+Switch ($wizardname){  
+
+    1{ return 'Vodor'}
+    2{ return 'Gryshnak'}
+    3{ return 'Mahmoud'}
+    4{ return 'Syed'}
+    5{ return 'Raschid'}
+    6{ return 'Alhabbal'}
+    7{ return 'Scheherazade'}
+    
+
+}
+
+
+}
+
+
+$thingcount = 1999
 $counter = 0
-
+$Wnumber = 1
 #Check File type
 
+$manatarget = $levfile[38800]
 
-
-$ThingCount = convert16bitint $levfile[1] $levfile[2]
-
-
-
-write-host "$ThingCount Things detected"
-
-if($ThingCount -eq 0){
-write-host "No Things found, is this actually a Magic Carpet level file?"
-write-host "Nothing to do - Exiting"
-exit
-}
+Write-host "Level Mana Target is $manatarget %"
 
 
 
 write-host "Class,ThingType,Model,ThingName,XPos,YPos,DisId,SwiSz,SwiId,Parent,Child"   #console headers
 $Fileoutput = @()
-
+$Wizardoutput = @()
 
 $fpos = 1090
 
@@ -477,7 +487,7 @@ $pathname = get-location
 
 $fileext = $csvname+".Things.csv"
 $mapname = $csvname+".png"
-write-host "Exporting to $fileext"
+write-host "Exporting Things list to $fileext"
 
 $Fileoutput | export-csv -NoTypeInformation $fileext
 
@@ -487,6 +497,49 @@ $bmp.Save($pathname.tostring()+"\"+$mapname)
 
 }
 
+$fpos = 37292
+
+$numwizards = $levfile[38802] - 1
+$CLevel = 38805
+
+DO
+{
+
+$Wname =  WizardName $Wnumber
+$Aggression =  $levfile[$fpos]
+$Perception =  $levfile[$fpos+4] 
+$Reflexes =   $levfile[$fpos+8]
+$CastleLevel = $levfile[$CLevel]
+
+if ($Wnumber -gt  $numwizards){
+$wpresent = "No"
+}
+Else{
+$wpresent = "Yes"
+}
+
+
+$WizardEntry = New-Object PSObject
+$WizardEntry| Add-Member -type NoteProperty -Name 'WizardName' -Value $wname
+$WizardEntry | Add-Member -type NoteProperty -Name 'Aggression' -Value $Aggression
+$WizardEntry | Add-Member -type NoteProperty -Name 'Perception' -Value $Perception
+$WizardEntry | Add-Member -type NoteProperty -Name 'Reflexes' -Value $Reflexes
+$WizardEntry | Add-Member -type NoteProperty -Name 'CastleLevel' -Value $CastleLevel
+$WizardEntry | Add-Member -type NoteProperty -Name 'Present' -Value $wpresent
+
+$Wizardoutput += $WizardEntry
+
+$wnumber = $wnumber + 1
+$fpos = $fpos + 216
+$CLevel = $CLevel + 1
+
+}UNTIL ($wnumber -eq 8)
+
+$fileext = $csvname+".Wizards.csv"
+
+write-host "Exporting Wizard data to $fileext"
+
+$Wizardoutput | export-csv -NoTypeInformation $fileext
 
 }
 
