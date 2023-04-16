@@ -212,7 +212,7 @@ Switch ($model){
     42{ return 'Unknown'}
     43{ return 'Unknown'}
     44{ return 'Unknown'}
-    45{ return 'Unknown'}
+    45{ return 'Villager Tent'}
     46{ return 'Unknown'}
     47{ return 'Unknown'}
     48{ return 'Unknown'}
@@ -336,6 +336,7 @@ Switch ($model){
 
 }
 
+
 function Wizardname($wizardname){ #Returns what the Wizard's name is
 
 Switch ($wizardname){  
@@ -355,16 +356,124 @@ Switch ($wizardname){
 }
 
 
+function SpellLoadout($spellstart){
+$spellList = ""
+
+if ($levfile[$spellstart] -eq 1){
+$spellList += "Fireball, "
+} 
+
+if ($levfile[$spellstart+1] -eq 1){
+$spellList += "Shield, "
+} 
+
+if ($levfile[$spellstart+2] -eq 1){
+$spellList += "Accelerate, "
+} 
+
+if ($levfile[$spellstart+3] -eq 1){
+$spellList += "Posession, "
+} 
+
+if ($levfile[$spellstart+4] -eq 1){
+$spellList += "Health, "
+} 
+
+if ($levfile[$spellstart+5] -eq 1){
+$spellList += "Beyond Sight, "
+} 
+
+if ($levfile[$spellstart+6] -eq 1){
+$spellList += "Earthquake, "
+}
+
+if ($levfile[$spellstart+7] -eq 1){
+$spellList += "Meteor, "
+}
+
+if ($levfile[$spellstart+8] -eq 1){
+$spellList += "Volcano, "
+}
+
+if ($levfile[$spellstart+9] -eq 1){
+$spellList += "Crater, "
+}
+
+if ($levfile[$spellstart+10] -eq 1){
+$spellList += "Teleport, "
+}
+
+if ($levfile[$spellstart+11] -eq 1){
+$spellList += "Duel, "
+}
+
+if ($levfile[$spellstart+12] -eq 1){
+$spellList += "Invisible, "
+}
+
+if ($levfile[$spellstart+13] -eq 1){
+$spellList += "Steal Mana, "
+}
+
+if ($levfile[$spellstart+14] -eq 1){
+$spellList += "Rebound, "
+}
+
+if ($levfile[$spellstart+15] -eq 1){
+$spellList += "Lightning, "
+}
+
+if ($levfile[$spellstart+16] -eq 1){
+$spellList += "Castle, "
+}
+
+if ($levfile[$spellstart+17] -eq 1){
+$spellList += "Undead Army, "
+}
+
+if ($levfile[$spellstart+18] -eq 1){
+$spellList += "Lightning Storm, "
+}
+
+if ($levfile[$spellstart+19] -eq 1){
+$spellList += "Mana Magnet, "
+}
+
+if ($levfile[$spellstart+19] -eq 1){
+$spellList += "Wall of Fire, "
+}
+
+if ($levfile[$spellstart+20] -eq 1){
+$spellList += "Reverse Acceleration, "
+}
+
+if ($levfile[$spellstart+21] -eq 1){
+$spellList += "Global Death, "
+}
+
+if ($levfile[$spellstart+21] -eq 1){
+$spellList += "Rapid Fireball"
+}
+
+Return $spellList
+
+}
+
 $thingcount = 1999
 $counter = 0
 $Wnumber = 1
 #Check File type
 
+$manatotal =  convert32bitint $levfile[0] $levfile[1] $levfile[2] $levfile[3]
 $manatarget = $levfile[38800]
 
-Write-host "Level Mana Target is $manatarget %"
 
 
+Write-host "Level Mana Target is $manatarget % of $manatotal"
+
+$playerspells = SpellLoadout 37088
+write-host "Player Spells: $playerspells"
+write-host ""
 
 write-host "Class,ThingType,Model,ThingName,XPos,YPos,DisId,SwiSz,SwiId,Parent,Child"   #console headers
 $Fileoutput = @()
@@ -511,6 +620,28 @@ $Perception =  $levfile[$fpos+4]
 $Reflexes =   $levfile[$fpos+8]
 $CastleLevel = $levfile[$CLevel]
 
+if ($wnumber -eq 1){
+$wizardspells = SpellLoadout 37304
+}
+Elseif ($wnumber -eq 2){
+$wizardspells = SpellLoadout 37520
+}
+Elseif ($wnumber -eq 3){
+$wizardspells = SpellLoadout 37736
+}
+Elseif ($wnumber -eq 4){
+$wizardspells = SpellLoadout 37952
+}
+Elseif ($wnumber -eq 5){
+$wizardspells = SpellLoadout 38168
+}
+Elseif ($wnumber -eq 6){
+$wizardspells = SpellLoadout 38384
+}
+Elseif ($wnumber -eq 7){
+$wizardspells = SpellLoadout 38600
+}
+
 if ($Wnumber -gt  $numwizards){
 $wpresent = "No"
 }
@@ -526,6 +657,7 @@ $WizardEntry | Add-Member -type NoteProperty -Name 'Perception' -Value $Percepti
 $WizardEntry | Add-Member -type NoteProperty -Name 'Reflexes' -Value $Reflexes
 $WizardEntry | Add-Member -type NoteProperty -Name 'CastleLevel' -Value $CastleLevel
 $WizardEntry | Add-Member -type NoteProperty -Name 'Present' -Value $wpresent
+$WizardEntry | Add-Member -type NoteProperty -Name 'SpellLoadout' -Value $wizardspells
 
 $Wizardoutput += $WizardEntry
 
