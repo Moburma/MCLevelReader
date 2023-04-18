@@ -29,7 +29,3 @@ Examples:
 
 ![Level26](https://github.com/Moburma/MCLevelReader/blob/main/LEV00026.DAT.png)
 ![Level27](https://github.com/Moburma/MCLevelReader/blob/main/LEV00027.DAT.png)
-
-# Todo
-
-- Figure out truth table for wizard spell loadouts
